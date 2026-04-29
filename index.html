@@ -101,14 +101,14 @@ td{padding:11px 4px;text-align:center;border-bottom:1px solid rgba(255,255,255,.
 tr:last-child td{border-bottom:none}
 tr.past td{color:var(--dim)}
 tr.future td{color:var(--text)}
-tr.next-row{background:linear-gradient(90deg,rgba(0,212,255,.18),rgba(0,212,255,.04));position:relative}
+tr.next-row{background:rgba(0,212,255,.14);position:relative;box-shadow:inset 0 0 0 1px rgba(0,212,255,.35)}
 tr.next-row td{color:#fff;font-weight:700;font-size:13.5px;padding:14px 4px}
-tr.next-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+tr.next-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
 td.no{color:var(--mute);font-size:10.5px;font-family:"SF Mono",Menlo,monospace;letter-spacing:.5px}
 tr.next-row td.no{color:var(--cyan)}
 tr.next-row td.no::after{content:"NEXT";display:block;font-size:8.5px;font-weight:800;letter-spacing:1px;margin-top:2px}
 td.hi-col{background:rgba(0,212,255,.06)}
-tr.next-row td.hi-col{background:rgba(0,212,255,.22)}
+tr.next-row td.hi-col{background:rgba(0,212,255,.28)}
 
 .empty{text-align:center;padding:40px;color:var(--mute);font-size:13px}
 .foot{position:fixed;bottom:0;left:0;right:0;background:rgba(10,22,40,.92);backdrop-filter:blur(10px);
