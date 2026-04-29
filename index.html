@@ -13,226 +13,79 @@
     --gtx: #00d4ff;
     --gtx2: #0066ff;
     --accent: #ff4d6d;
-    --green: #00e5a0;
     --text: #e4ecff;
     --muted: #5a6888;
     --border: rgba(255,255,255,0.06);
     --glow: 0 0 30px rgba(0,212,255,0.2);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'Noto Sans KR', -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  header {
-    position: sticky; top:0; z-index:100;
-    background: rgba(8,12,24,0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .header-inner {
-    max-width: 860px; margin:0 auto;
-    display:flex; align-items:center; justify-content:space-between;
-    padding: 0 20px; height: 58px;
-  }
+  body { font-family: 'Noto Sans KR', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  header { position: sticky; top:0; z-index:100; background: rgba(8,12,24,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .header-inner { max-width: 860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding: 0 20px; height: 58px; }
   .logo { display:flex; align-items:center; gap:10px; }
-  .logo-badge {
-    background: linear-gradient(135deg, var(--gtx), var(--gtx2));
-    color:#000; font-family:'Space Mono',monospace; font-size:0.8rem;
-    font-weight:700; padding:4px 10px; border-radius:6px; letter-spacing:2px;
-  }
+  .logo-badge { background: linear-gradient(135deg, var(--gtx), var(--gtx2)); color:#000; font-family:'Space Mono',monospace; font-size:0.8rem; font-weight:700; padding:4px 10px; border-radius:6px; letter-spacing:2px; }
   .logo-text { font-size:1rem; font-weight:700; letter-spacing:1px; }
-  .clock {
-    font-family:'Space Mono',monospace; font-size:1rem;
-    color: var(--gtx); letter-spacing:2px;
-  }
-
-  /* HERO */
-  .hero {
-    background: linear-gradient(160deg,#0c1428 0%,#081020 100%);
-    padding: 32px 20px 24px; position:relative; overflow:hidden;
-  }
-  .hero::after {
-    content:'';
-    position:absolute; top:-80px; right:-60px;
-    width:360px; height:360px; border-radius:50%;
-    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
-    pointer-events:none;
-  }
+  .clock { font-family:'Space Mono',monospace; font-size:1rem; color: var(--gtx); letter-spacing:2px; }
+  .hero { background: linear-gradient(160deg,#0c1428 0%,#081020 100%); padding: 32px 20px 24px; position:relative; overflow:hidden; }
+  .hero::after { content:''; position:absolute; top:-80px; right:-60px; width:360px; height:360px; border-radius:50%; background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%); pointer-events:none; }
   .hero-inner { max-width:860px; margin:0 auto; }
   .hero h1 { font-size:1.75rem; font-weight:900; line-height:1.25; }
   .hero h1 em { color:var(--gtx); font-style:normal; }
   .hero-sub { margin-top:8px; font-size:0.83rem; color:var(--muted); letter-spacing:0.5px; }
-
-  /* ROUTE MAP */
   .section { max-width:860px; margin:0 auto; padding:24px 20px 0; }
-  .card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:16px; padding:20px;
-  }
-  .card-label {
-    font-size:0.68rem; letter-spacing:2.5px; color:var(--muted);
-    text-transform:uppercase; font-weight:700; margin-bottom:16px;
-  }
-
-  /* ROUTE LINE */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; }
+  .card-label { font-size:0.68rem; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; font-weight:700; margin-bottom:16px; }
   .route-scroll { overflow-x:auto; padding-bottom:4px; }
-  .route-line {
-    display:flex; align-items:flex-start; min-width:580px; position:relative;
-  }
-  .rstation {
-    display:flex; flex-direction:column; align-items:center;
-    min-width:64px; cursor:pointer;
-  }
-  .rdot-wrap {
-    display:flex; align-items:center; width:100%; justify-content:center;
-    position:relative;
-  }
-  .rdot-line {
-    height:3px; flex:1;
-    background: linear-gradient(90deg, var(--gtx), var(--gtx2));
-  }
-  .rdot-line.gap {
-    background: repeating-linear-gradient(
-      90deg,var(--muted) 0,var(--muted) 5px,transparent 5px,transparent 10px
-    ); opacity:0.3;
-  }
+  .route-line { display:flex; align-items:flex-start; min-width:580px; position:relative; }
+  .rstation { display:flex; flex-direction:column; align-items:center; min-width:64px; cursor:pointer; }
+  .rdot-wrap { display:flex; align-items:center; width:100%; justify-content:center; position:relative; }
+  .rdot-line { height:3px; flex:1; background: linear-gradient(90deg, var(--gtx), var(--gtx2)); }
+  .rdot-line.gap { background: repeating-linear-gradient(90deg,var(--muted) 0,var(--muted) 5px,transparent 5px,transparent 10px); opacity:0.3; }
   .rdot-line.hidden { visibility:hidden; }
-  .rdot {
-    width:13px; height:13px; border-radius:50%;
-    border:2.5px solid var(--gtx); background:var(--surface);
-    flex-shrink:0; transition:all 0.2s; z-index:1;
-  }
-  .rstation.terminus .rdot {
-    width:17px; height:17px;
-    background:var(--gtx); box-shadow:0 0 12px rgba(0,212,255,0.5);
-  }
-  .rstation.seg-active .rdot {
-    background:rgba(0,212,255,0.25);
-    box-shadow:0 0 10px rgba(0,212,255,0.4);
-  }
+  .rdot { width:13px; height:13px; border-radius:50%; border:2.5px solid var(--gtx); background:var(--surface); flex-shrink:0; transition:all 0.2s; z-index:1; }
+  .rstation.terminus .rdot { width:17px; height:17px; background:var(--gtx); box-shadow:0 0 12px rgba(0,212,255,0.5); }
+  .rstation.seg-active .rdot { background:rgba(0,212,255,0.25); box-shadow:0 0 10px rgba(0,212,255,0.4); }
   .rstation.wip .rdot { border-color:var(--muted); }
-  .rname {
-    margin-top:9px; font-size:0.66rem; color:var(--muted);
-    text-align:center; white-space:nowrap; font-weight:500; line-height:1.3;
-  }
+  .rname { margin-top:9px; font-size:0.66rem; color:var(--muted); text-align:center; white-space:nowrap; font-weight:500; line-height:1.3; }
   .rstation.terminus .rname { color:var(--text); font-weight:700; }
   .rstation.seg-active .rname { color:var(--gtx); }
   .wip-tag { color:var(--accent); font-size:0.58rem; display:block; }
-
-  /* TABS */
   .tabs { display:flex; gap:10px; margin-bottom:20px; }
-  .tab {
-    flex:1; padding:13px 10px; text-align:center;
-    background:var(--surface); border:1.5px solid var(--border);
-    border-radius:12px; color:var(--muted); cursor:pointer;
-    font-family:inherit; font-size:0.82rem; font-weight:700;
-    transition:all 0.2s; line-height:1.4;
-  }
-  .tab.active {
-    background:rgba(0,212,255,0.08);
-    border-color:var(--gtx); color:var(--gtx);
-    box-shadow: var(--glow);
-  }
+  .tab { flex:1; padding:13px 10px; text-align:center; background:var(--surface); border:1.5px solid var(--border); border-radius:12px; color:var(--muted); cursor:pointer; font-family:inherit; font-size:0.82rem; font-weight:700; transition:all 0.2s; line-height:1.4; }
+  .tab.active { background:rgba(0,212,255,0.08); border-color:var(--gtx); color:var(--gtx); box-shadow: var(--glow); }
   .tab small { font-weight:400; font-size:0.72rem; }
-
-  /* INFO PILLS */
   .pills { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
-  .pill {
-    flex:1; min-width:120px;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:10px; padding:10px 14px;
-    display:flex; align-items:center; gap:10px;
-  }
+  .pill { flex:1; min-width:120px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 14px; display:flex; align-items:center; gap:10px; }
   .pill-ico { font-size:1.1rem; }
   .pill-info { display:flex; flex-direction:column; }
   .pill-lbl { font-size:0.67rem; color:var(--muted); }
   .pill-val { font-size:0.88rem; font-weight:700; }
-
-  /* CONTROLS */
-  .ctrl-row {
-    display:flex; align-items:center; gap:10px;
-    margin-bottom:18px; flex-wrap:wrap;
-  }
+  .ctrl-row { display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
   .dir-grp { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
-  .dir-btn {
-    padding:9px 16px; font-family:inherit; font-size:0.78rem; font-weight:700;
-    background:none; border:none; color:var(--muted); cursor:pointer;
-    transition:all 0.2s; white-space:nowrap;
-  }
+  .dir-btn { padding:9px 16px; font-family:inherit; font-size:0.78rem; font-weight:700; background:none; border:none; color:var(--muted); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
   .dir-btn.active { background:var(--gtx); color:#000; }
-
-  .day-grp { display:flex; gap:6px; margin-left:auto; }
-  .day-btn {
-    padding:7px 13px; border-radius:8px;
-    font-family:inherit; font-size:0.75rem; font-weight:700;
-    background:var(--surface); border:1px solid var(--border);
-    color:var(--muted); cursor:pointer; transition:all 0.2s;
-  }
-  .day-btn.active { background:rgba(0,212,255,0.1); border-color:var(--gtx); color:var(--gtx); }
-
-  /* NEXT TRAIN */
-  .next-card {
-    background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(0,102,255,0.05));
-    border:1px solid rgba(0,212,255,0.22); border-radius:14px;
-    padding:18px 20px; margin-bottom:18px;
-    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-  }
+  .next-card { background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(0,102,255,0.05)); border:1px solid rgba(0,212,255,0.22); border-radius:14px; padding:18px 20px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   .next-label { font-size:0.67rem; color:var(--gtx); letter-spacing:2px; font-weight:700; margin-bottom:6px; }
   .next-time { font-family:'Space Mono',monospace; font-size:2.1rem; font-weight:700; line-height:1; }
   .next-route { font-size:0.78rem; color:var(--muted); margin-top:5px; }
   .cd-box { text-align:right; }
   .cd-num { font-family:'Space Mono',monospace; font-size:1.6rem; font-weight:700; color:var(--gtx); }
   .cd-lbl { font-size:0.72rem; color:var(--muted); }
-
-  /* TABLE */
-  .tbl-wrap {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:16px; overflow:hidden; margin-bottom:40px;
-  }
-  .tbl-head {
-    display:grid; background:var(--surface2);
-    border-bottom:1px solid var(--border);
-  }
-  .th {
-    padding:11px 10px; font-size:0.67rem; letter-spacing:1.5px;
-    color:var(--muted); text-transform:uppercase; font-weight:700; text-align:center;
-    border-right:1px solid var(--border);
-  }
+  .tbl-wrap { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:40px; }
+  .tbl-head { display:grid; background:var(--surface2); border-bottom:1px solid var(--border); }
+  .th { padding:11px 10px; font-size:0.67rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; font-weight:700; text-align:center; border-right:1px solid var(--border); }
   .th:first-child { text-align:left; padding-left:16px; }
   .th:last-child { border-right:none; }
-
-  .tbl-row {
-    display:grid; border-bottom:1px solid rgba(255,255,255,0.035);
-    cursor:pointer; transition:background 0.12s;
-  }
+  .tbl-row { display:grid; border-bottom:1px solid rgba(255,255,255,0.035); cursor:pointer; transition:background 0.12s; }
   .tbl-row:last-child { border-bottom:none; }
   .tbl-row:hover { background:rgba(0,212,255,0.03); }
   .tbl-row.is-next { background:rgba(0,212,255,0.05); border-left:3px solid var(--gtx); }
   .tbl-row.is-past { opacity:0.32; }
-
-  .td {
-    padding:13px 10px; font-family:'Space Mono',monospace;
-    font-size:0.82rem; text-align:center;
-    border-right:1px solid rgba(255,255,255,0.03);
-  }
+  .td { padding:13px 10px; font-family:'Space Mono',monospace; font-size:0.82rem; text-align:center; border-right:1px solid rgba(255,255,255,0.03); }
   .td:first-child { text-align:left; padding-left:16px; color:var(--muted); font-size:0.75rem; }
   .td:last-child { border-right:none; }
-
-  .next-badge {
-    display:block; font-size:0.58rem; color:var(--gtx);
-    letter-spacing:1px; margin-top:2px; font-family:'Noto Sans KR',sans-serif;
-  }
-
-  @media(max-width:600px) {
-    .hero h1 { font-size:1.35rem; }
-    .next-time { font-size:1.5rem; }
-    .tab { font-size:0.76rem; }
-  }
+  .next-badge { display:block; font-size:0.58rem; color:var(--gtx); letter-spacing:1px; margin-top:2px; font-family:'Noto Sans KR',sans-serif; }
+  @media(max-width:600px) { .hero h1 { font-size:1.35rem; } .next-time { font-size:1.5rem; } .tab { font-size:0.76rem; } }
 </style>
 </head>
 <body>
@@ -254,7 +107,6 @@
   </div>
 </div>
 
-<!-- ROUTE MAP -->
 <div class="section">
   <div class="card">
     <div class="card-label">노선도</div>
@@ -264,32 +116,18 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="section" style="padding-top:20px; padding-bottom:0;">
-
   <div class="tabs">
-    <button class="tab" onclick="setSeg('north')">
-      🔵 북부 구간<br><small>운정중앙 ↔ 서울역</small>
-    </button>
-    <button class="tab active" onclick="setSeg('south')">
-      🔵 남부 구간<br><small>수서 ↔ 동탄</small>
-    </button>
+    <button class="tab" onclick="setSeg('north')">🔵 북부 구간<br><small>운정중앙 ↔ 서울역</small></button>
+    <button class="tab active" onclick="setSeg('south')">🔵 남부 구간<br><small>수서 ↔ 동탄</small></button>
   </div>
-
   <div class="pills" id="pillsRow"></div>
-
   <div class="ctrl-row">
-    <div class="dir-grp" id="dirGrp">
-      <button class="dir-btn active" id="d0" onclick="setDir(0)">←</button>
-      <button class="dir-btn" id="d1" onclick="setDir(1)">→</button>
-    </div>
-    <div class="day-grp">
-      <button class="day-btn active" id="dwk" onclick="setDay('week')">평일</button>
-      <button class="day-btn" id="dsat" onclick="setDay('sat')">토요일</button>
-      <button class="day-btn" id="dhol" onclick="setDay('hol')">공휴일</button>
+    <div class="dir-grp">
+      <button class="dir-btn" id="d0" onclick="setDir(0)">←</button>
+      <button class="dir-btn active" id="d1" onclick="setDir(1)">→</button>
     </div>
   </div>
-
   <div class="next-card">
     <div>
       <div class="next-label">▶ NEXT TRAIN</div>
@@ -301,7 +139,6 @@
       <div class="cd-lbl" id="cdl">분 후 출발</div>
     </div>
   </div>
-
 </div>
 
 <div class="section" style="padding-top:0; padding-bottom:40px;">
@@ -309,62 +146,144 @@
 </div>
 
 <script>
+// ─── 시간표 데이터 (GTX-A 공식 홈페이지 기준) ───────────────────────────
+// 수서역 기준 출발 시각 목록 (수서→동탄 방향: dir=0, 동탄→수서 방향: dir=1)
+// PDF에서 각 역별 출발시각을 수서역 기준으로 정리
+
+// 남부구간: 수서(기준) → 성남(+6) → 구성(+12) → 동탄(+19)
+// 반대방향: 동탄 기준, 동탄→구성(+7)→성남(+13)→수서(+19)
+
+// 수서역 출발 시각 (수서→동탄)
+const SUSEO_TO_DONGTAN = [
+  '05:31',
+  '06:04','06:23','06:40','06:57',
+  '07:08','07:25','07:42','07:57',
+  '08:09','08:26','08:43','08:57',
+  '09:10','09:27','09:47',
+  '10:04','10:28','10:36',
+  '11:04','11:30','11:50',
+  '12:08','12:32','12:41',
+  '13:14','13:34','13:46',
+  '14:00','14:20','14:44',
+  '15:10','15:31','15:47',
+  '16:05','16:17','16:40','16:56',
+  '17:03','17:21','17:40','17:50',
+  '18:10','18:28','18:40','18:51',
+  '19:14','19:29','19:43',
+  '20:04','20:19','20:35','20:50',
+  '21:01','21:14','21:31','21:45',
+  '22:08','22:30',
+  '23:00','23:25','23:50',
+  '00:15','막차00:39'
+].filter(t=>!t.startsWith('막차')).concat(['00:39']);
+
+// 동탄역 출발 시각 (동탄→수서)
+const DONGTAN_TO_SUSEO = [
+  '05:30',
+  '06:11','06:37','06:55',
+  '07:07','07:16','07:35','07:54',
+  '08:02','08:19','08:40','08:55',
+  '09:11','09:17','09:42',
+  '10:11','10:17','10:42',
+  '11:18','11:43',
+  '12:04','12:23','12:46','12:55',
+  '13:21','13:41','13:53',
+  '14:07','14:17','14:42',
+  '15:24','15:47',
+  '16:05','16:16','16:40','16:57',
+  '17:07','17:13','17:43',
+  '18:01','18:24','18:43','18:56',
+  '19:05','19:42',
+  '20:00','20:15','20:31','20:44',
+  '21:01','21:17','21:28','21:44',
+  '22:04','22:22','22:37',
+  '23:07','23:32','23:53',
+  '00:06','막차00:27'
+].filter(t=>!t.startsWith('막차')).concat(['00:27']);
+
+// 북부구간: 운정중앙 → 킨텍스(+7) → 대곡(+12) → 연신내(+20) → 서울역(+26)
+// 서울역 → 연신내(+6) → 대곡(+12) → 킨텍스(+20) → 운정중앙(+26) [반대방향]
+
+// 운정중앙 출발 시각 (운정중앙→서울역)
+const UNJUNG_TO_SEOUL = [
+  '05:30','05:40','05:50',
+  '06:00','06:05','06:12','06:18','06:25','06:31','06:37','06:43','06:50','06:56',
+  '07:02','07:08','07:13','07:15','07:21','07:24','07:27','07:33','07:37','07:40','07:46','07:49','07:52','07:57',
+  '08:05','08:11','08:17','08:23','08:28','08:36','08:42','08:48','08:55',
+  '09:03','09:11','09:19','09:27','09:35','09:43','09:51',
+  '10:00','10:10','10:20','10:30','10:40','10:50',
+  '11:00','11:10','11:20','11:30','11:40','11:50',
+  '12:00','12:10','12:20','12:30','12:40','12:50',
+  '13:00','13:10','13:20','13:30','13:40','13:50',
+  '14:04','14:12','14:20','14:28','14:36','14:46',
+  '15:00','15:08','15:16','15:24','15:32','15:40','15:48','15:56',
+  '16:04','16:12','16:20','16:27','16:34','16:40','16:46','16:52','16:59',
+  '17:05','17:11','17:17','17:24','17:30','17:36','17:42','17:49','17:55',
+  '18:01','18:07','18:11','18:14','18:17','18:20','18:22','18:25','18:28','18:31','18:34','18:37','18:42','18:48','18:54',
+  '19:01','19:07','19:13','19:26','19:38','19:50',
+  '20:01','20:09','20:17','20:25','20:33','20:41','20:49','20:57',
+  '21:05','21:13','21:21','21:30','21:40','21:50',
+  '22:00','22:10','22:20','22:30','22:40','22:50',
+  '23:00','23:10','23:20','23:30','23:40','23:50',
+  '00:00','00:10','00:18','막차00:36'
+].filter(t=>!t.startsWith('막차')).concat(['00:36']);
+
+// 서울역 출발 시각 (서울역→운정중앙)
+const SEOUL_TO_UNJUNG = [
+  '05:30',
+  '06:00','06:10','06:20','06:30','06:38','06:42','06:48','06:52','06:56',
+  '07:01','07:07','07:13','07:16','07:20','07:22','07:25','07:28','07:31','07:35','07:41','07:44','07:47','07:53','07:57',
+  '08:01','08:05','08:10','08:15','08:22','08:28','08:35','08:41','08:47','08:53',
+  '09:00','09:07','09:13','09:20','09:27','09:33','09:40','09:47','09:53',
+  '10:00','10:10','10:20','10:30','10:40','10:50',
+  '11:00','11:10','11:20','11:30','11:40','11:50',
+  '12:00','12:10','12:20','12:30','12:40','12:50',
+  '13:00','13:10','13:20','13:30','13:40','13:50',
+  '14:00','14:08','14:16','14:24','14:32','14:42','14:52',
+  '15:00','15:08','15:16','15:24','15:32','15:40','15:46','15:54',
+  '16:02','16:10','16:18','16:24','16:30','16:36','16:42','16:48','16:54',
+  '17:00','17:06','17:12','17:18','17:24','17:31','17:37','17:43','17:54',
+  '18:00','18:06','18:12','18:18','18:25','18:31','18:37','18:43','18:49','18:55',
+  '19:04','19:13','19:20','19:29','19:38','19:47','19:56',
+  '20:04','20:11','20:19','20:27','20:35','20:43','20:52',
+  '21:00','21:09','21:17','21:26','21:35','21:45','21:55',
+  '22:05','22:15','22:25','22:35','22:45','22:55',
+  '23:05','23:15','23:25','23:35','23:45','23:55',
+  '00:05','00:15','막차00:38'
+].filter(t=>!t.startsWith('막차')).concat(['00:38']);
+
 const DATA = {
   north: {
     label: '북부 구간',
     pills: [
       { ico:'🚉', lbl:'운행 역수', val:'5개역' },
       { ico:'⚡', lbl:'최고속도', val:'180 km/h' },
-      { ico:'⏱', lbl:'전구간', val:'약 21분' },
-      { ico:'🔄', lbl:'첨두 배차', val:'6분 15초' },
+      { ico:'⏱', lbl:'전구간 소요', val:'약 26분' },
+      { ico:'🔄', lbl:'첨두 배차', val:'약 6분' },
     ],
     dirs: ['← 서울역 방향', '운정중앙 방향 →'],
-    stations: ['운정중앙','킨텍스','대곡','연신내','서울역'],
-    tMin: [0, 7, 11, 17, 21],
-    sch: {
-      week: {
-        0:['05:30','05:40','05:50','06:00','06:10','06:20','06:28','06:35','06:41','06:47','06:54','07:00','07:07','07:14','07:21','07:28','07:35','07:42','07:49','07:56','08:03','08:10','08:18','08:25','08:32','08:39','08:46','08:53','09:00','09:10','09:20','09:30','09:40','09:50','10:00','10:10','10:20','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45','14:00','14:15','14:30','14:45','15:00','15:15','15:30','15:45','16:00','16:10','16:20','16:30','16:40','16:50','17:00','17:07','17:14','17:21','17:28','17:35','17:42','17:49','17:56','18:03','18:10','18:20','18:30','18:45','19:00','19:15','19:30','19:45','20:00','20:15','20:30','20:45','21:00','21:15','21:30','21:45','22:00','22:20','22:40','23:00','23:20','23:40','00:00','00:20','00:40'],
-        1:['05:30','05:40','05:50','06:00','06:10','06:20','06:28','06:35','06:41','06:47','06:54','07:00','07:07','07:14','07:21','07:28','07:35','07:42','07:49','07:56','08:03','08:10','08:18','08:25','08:32','08:39','08:46','08:53','09:00','09:10','09:20','09:30','09:40','09:50','10:00','10:10','10:20','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45','14:00','14:15','14:30','14:45','15:00','15:15','15:30','15:45','16:00','16:10','16:20','16:30','16:40','16:50','17:00','17:07','17:14','17:21','17:28','17:35','17:42','17:49','17:56','18:03','18:10','18:20','18:30','18:45','19:00','19:15','19:30','19:45','20:00','20:15','20:30','20:45','21:00','21:15','21:30','21:45','22:00','22:20','22:40','23:00','23:20','23:40','00:10','00:30'],
-      },
-      sat: {
-        0:['06:00','06:20','06:40','07:00','07:20','07:40','08:00','08:20','08:40','09:00','09:15','09:30','09:45','10:00','10:15','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:20','12:40','13:00','13:20','13:40','14:00','14:20','14:40','15:00','15:20','15:40','16:00','16:20','16:40','17:00','17:20','17:40','18:00','18:20','18:40','19:00','19:20','19:40','20:00','20:20','20:40','21:00','21:20','21:40','22:00','22:30','23:00','23:30','00:00'],
-        1:['06:00','06:20','06:40','07:00','07:20','07:40','08:00','08:20','08:40','09:00','09:15','09:30','09:45','10:00','10:15','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:20','12:40','13:00','13:20','13:40','14:00','14:20','14:40','15:00','15:20','15:40','16:00','16:20','16:40','17:00','17:20','17:40','18:00','18:20','18:40','19:00','19:20','19:40','20:00','20:20','20:40','21:00','21:20','21:40','22:00','22:30','23:00','23:30','00:00'],
-      },
-      hol: {
-        0:['06:10','06:30','06:50','07:10','07:30','07:50','08:10','08:30','08:50','09:10','09:30','09:50','10:10','10:30','10:50','11:10','11:30','11:50','12:10','12:30','12:50','13:10','13:30','13:50','14:10','14:30','14:50','15:10','15:30','15:50','16:10','16:30','16:50','17:10','17:30','17:50','18:10','18:30','18:50','19:10','19:30','19:50','20:10','20:30','20:50','21:10','21:30','21:50','22:10','22:40','23:10','23:40','00:10'],
-        1:['06:10','06:30','06:50','07:10','07:30','07:50','08:10','08:30','08:50','09:10','09:30','09:50','10:10','10:30','10:50','11:10','11:30','11:50','12:10','12:30','12:50','13:10','13:30','13:50','14:10','14:30','14:50','15:10','15:30','15:50','16:10','16:30','16:50','17:10','17:30','17:50','18:10','18:30','18:50','19:10','19:30','19:50','20:10','20:30','20:50','21:10','21:30','21:50','22:10','22:40','23:10','23:40','00:10'],
-      }
-    }
+    // dir=0: 운정중앙→서울, dir=1: 서울→운정중앙
+    stations: [['운정중앙','킨텍스','대곡','연신내','서울역'],['서울역','연신내','대곡','킨텍스','운정중앙']],
+    tMin: [[0,7,12,20,26],[0,6,12,20,26]],
+    sch: { 0: UNJUNG_TO_SEOUL, 1: SEOUL_TO_UNJUNG }
   },
   south: {
     label: '남부 구간',
     pills: [
       { ico:'🚉', lbl:'운행 역수', val:'4개역' },
       { ico:'⚡', lbl:'최고속도', val:'180 km/h' },
-      { ico:'⏱', lbl:'전구간', val:'약 19분' },
-      { ico:'🔄', lbl:'평시 배차', val:'약 15~20분' },
+      { ico:'⏱', lbl:'전구간 소요', val:'약 19분' },
+      { ico:'🔄', lbl:'평시 배차', val:'약 15~30분' },
     ],
     dirs: ['← 동탄 방향', '수서 방향 →'],
-    stations: ['수서','성남','구성','동탄'],
-    tMin: [0, 6, 12, 19],
-    sch: {
-      week: {
-        0:['05:38','05:58','06:18','06:38','06:55','07:10','07:25','07:40','07:55','08:10','08:28','08:51','09:18','09:51','10:18','10:51','11:18','11:51','12:18','12:51','13:18','13:51','14:18','14:51','15:18','15:51','16:18','16:46','17:10','17:28','17:51','18:15','18:28','18:51','19:18','19:51','20:18','20:51','21:18','21:51','22:18','22:51','23:18','23:51','00:18'],
-        1:['05:40','06:00','06:20','06:40','06:57','07:12','07:27','07:42','07:57','08:12','08:30','08:53','09:20','09:53','10:20','10:53','11:20','11:53','12:20','12:53','13:20','13:53','14:20','14:53','15:20','15:53','16:20','16:48','17:12','17:30','17:53','18:17','18:30','18:53','19:20','19:53','20:20','20:53','21:20','21:53','22:20','22:53','23:20','23:53','00:20'],
-      },
-      sat: {
-        0:['06:00','06:28','07:00','07:28','08:00','08:28','09:00','09:28','10:00','10:28','11:00','11:28','12:00','12:28','13:00','13:28','14:00','14:28','15:00','15:28','16:00','16:28','17:00','17:28','18:00','18:28','19:00','19:28','20:00','20:28','21:00','21:28','22:00','22:28','23:00','23:28','00:00'],
-        1:['06:00','06:28','07:00','07:28','08:00','08:28','09:00','09:28','10:00','10:28','11:00','11:28','12:00','12:28','13:00','13:28','14:00','14:28','15:00','15:28','16:00','16:28','17:00','17:28','18:00','18:28','19:00','19:28','20:00','20:28','21:00','21:28','22:00','22:28','23:00','23:28','00:00'],
-      },
-      hol: {
-        0:['06:05','06:35','07:05','07:35','08:05','08:35','09:05','09:35','10:05','10:35','11:05','11:35','12:05','12:35','13:05','13:35','14:05','14:35','15:05','15:35','16:05','16:35','17:05','17:35','18:05','18:35','19:05','19:35','20:05','20:35','21:05','21:35','22:05','22:35','23:05','23:35','00:05'],
-        1:['06:05','06:35','07:05','07:35','08:05','08:35','09:05','09:35','10:05','10:35','11:05','11:35','12:05','12:35','13:05','13:35','14:05','14:35','15:05','15:35','16:05','16:35','17:05','17:35','18:05','18:35','19:05','19:35','20:05','20:35','21:05','21:35','22:05','22:35','23:05','23:35','00:05'],
-      }
-    }
+    // dir=0: 수서→동탄, dir=1: 동탄→수서
+    stations: [['수서','성남','구성','동탄'],['동탄','구성','성남','수서']],
+    tMin: [[0,6,12,19],[0,7,13,19]],
+    sch: { 0: SUSEO_TO_DONGTAN, 1: DONGTAN_TO_SUSEO }
   }
 };
 
-let seg='south', dir=1, day='week';
+let seg='south', dir=1;
 
 function toMin(t) {
   let [h,m]=t.split(':').map(Number);
@@ -376,17 +295,14 @@ function addM(t,m) {
   let tot=h*60+mn+m;
   return String(Math.floor(tot/60)%24).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
 }
-function nowMin() {
-  const d=new Date(); return d.getHours()*60+d.getMinutes();
-}
+function nowMin() { const d=new Date(); return d.getHours()*60+d.getMinutes(); }
 
-/* ROUTE MAP */
 const ALL_STATIONS=[
   {n:'운정중앙',s:'north'},{n:'킨텍스',s:'north'},{n:'대곡',s:'north'},{n:'연신내',s:'north'},
-  {n:'서울역',s:'both'},
-  {n:'삼성',s:'wip',wip:true},
+  {n:'서울역',s:'both'},{n:'삼성',s:'wip',wip:true},
   {n:'수서',s:'south'},{n:'성남',s:'south'},{n:'구성',s:'south'},{n:'동탄',s:'south'},
 ];
+
 function buildRoute() {
   const el=document.getElementById('routeLine'); el.innerHTML='';
   ALL_STATIONS.forEach((st,i)=>{
@@ -394,10 +310,8 @@ function buildRoute() {
     const isTerm=(i===0||i===ALL_STATIONS.length-1);
     const isActive=(seg==='north'&&st.s==='north')||(seg==='south'&&st.s==='south')||st.s==='both';
     node.className='rstation'+(isTerm?' terminus':'')+(isActive?' seg-active':'')+(st.wip?' wip':'');
-
     const lineL=i>0?`<div class="rdot-line${ALL_STATIONS[i-1].wip||st.wip?' gap':''}"></div>`:'<div class="rdot-line hidden"></div>';
     const lineR=i<ALL_STATIONS.length-1?`<div class="rdot-line${st.wip?' gap':''}"></div>`:'<div class="rdot-line hidden"></div>';
-
     node.innerHTML=`<div class="rdot-wrap">${lineL}<div class="rdot"></div>${lineR}</div><div class="rname">${st.n}${st.wip?'<span class="wip-tag">공사중</span>':''}</div>`;
     el.appendChild(node);
   });
@@ -420,9 +334,9 @@ function buildDirBtns() {
 
 function buildTable() {
   const d=DATA[seg];
-  const sch=d.sch[day][dir];
-  const stas=dir===0?[...d.stations]:[...d.stations].reverse();
-  const tms=dir===0?[...d.tMin]:[...d.tMin].map(m=>d.tMin[d.tMin.length-1]-m).reverse();
+  const sch=d.sch[dir];
+  const stas=d.stations[dir];
+  const tms=d.tMin[dir];
   const nm=nowMin();
 
   let nextIdx=-1;
@@ -430,7 +344,6 @@ function buildTable() {
     if(toMin(sch[i])>=nm){nextIdx=i;break;}
   }
 
-  // Next card
   if(nextIdx>=0){
     const dep=sch[nextIdx];
     const diff=toMin(dep)-nm;
@@ -447,7 +360,6 @@ function buildTable() {
 
   const colsFr=stas.map(()=>'1fr').join(' ');
   const gridCols=`80px ${colsFr}`;
-
   const s=Math.max(0,nextIdx-4);
   const e=Math.min(sch.length,nextIdx+28);
 
@@ -471,20 +383,12 @@ function buildTable() {
 }
 
 function setSeg(s) {
-  seg=s; dir=0;
+  seg=s; dir=(s==='south'?1:0);
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&s==='north')||(i===1&&s==='south')));
   buildRoute(); buildPills(); buildDirBtns(); buildTable();
 }
 function setDir(d){ dir=d; buildDirBtns(); buildTable(); }
-function setDay(d){
-  day=d;
-  ['wk','sat','hol'].forEach((k,i)=>{
-    document.getElementById('d'+k).className='day-btn'+(['week','sat','hol'][i]===d?' active':'');
-  });
-  buildTable();
-}
 
-// clock
 function tick(){
   const n=new Date();
   document.getElementById('clock').textContent=
