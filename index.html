@@ -1,403 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="theme-color" content="#0b3d91"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="GTX-A"/>
+<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"GTX-A 시간표","short_name":"GTX-A","start_url":".","display":"standalone","background_color":"%23ffffff","theme_color":"%230b3d91","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27><rect width=%27192%27 height=%27192%27 rx=%2740%27 fill=%27%230b3d91%27/><text x=%2796%27 y=%27122%27 font-size=%2790%27 font-family=%27sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27>A</text></svg>","sizes":"192x192","type":"image/svg+xml"}]}'/>
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%230b3d91'/><text x='96' y='122' font-size='90' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>"/>
 <title>GTX-A 시간표</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c18;
-    --surface: #0f1628;
-    --surface2: #17213a;
-    --gtx: #00d4ff;
-    --gtx2: #0066ff;
-    --accent: #ff4d6d;
-    --text: #e4ecff;
-    --muted: #5a6888;
-    --border: rgba(255,255,255,0.06);
-    --glow: 0 0 30px rgba(0,212,255,0.2);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Noto Sans KR', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-  header { position: sticky; top:0; z-index:100; background: rgba(8,12,24,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-  .header-inner { max-width: 860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding: 0 20px; height: 58px; }
-  .logo { display:flex; align-items:center; gap:10px; }
-  .logo-badge { background: linear-gradient(135deg, var(--gtx), var(--gtx2)); color:#000; font-family:'Space Mono',monospace; font-size:0.8rem; font-weight:700; padding:4px 10px; border-radius:6px; letter-spacing:2px; }
-  .logo-text { font-size:1rem; font-weight:700; letter-spacing:1px; }
-  .clock { font-family:'Space Mono',monospace; font-size:1rem; color: var(--gtx); letter-spacing:2px; }
-  .hero { background: linear-gradient(160deg,#0c1428 0%,#081020 100%); padding: 32px 20px 24px; position:relative; overflow:hidden; }
-  .hero::after { content:''; position:absolute; top:-80px; right:-60px; width:360px; height:360px; border-radius:50%; background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%); pointer-events:none; }
-  .hero-inner { max-width:860px; margin:0 auto; }
-  .hero h1 { font-size:1.75rem; font-weight:900; line-height:1.25; }
-  .hero h1 em { color:var(--gtx); font-style:normal; }
-  .hero-sub { margin-top:8px; font-size:0.83rem; color:var(--muted); letter-spacing:0.5px; }
-  .section { max-width:860px; margin:0 auto; padding:24px 20px 0; }
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; }
-  .card-label { font-size:0.68rem; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; font-weight:700; margin-bottom:16px; }
-  .route-scroll { overflow-x:auto; padding-bottom:4px; }
-  .route-line { display:flex; align-items:flex-start; min-width:580px; position:relative; }
-  .rstation { display:flex; flex-direction:column; align-items:center; min-width:64px; cursor:pointer; }
-  .rdot-wrap { display:flex; align-items:center; width:100%; justify-content:center; position:relative; }
-  .rdot-line { height:3px; flex:1; background: linear-gradient(90deg, var(--gtx), var(--gtx2)); }
-  .rdot-line.gap { background: repeating-linear-gradient(90deg,var(--muted) 0,var(--muted) 5px,transparent 5px,transparent 10px); opacity:0.3; }
-  .rdot-line.hidden { visibility:hidden; }
-  .rdot { width:13px; height:13px; border-radius:50%; border:2.5px solid var(--gtx); background:var(--surface); flex-shrink:0; transition:all 0.2s; z-index:1; }
-  .rstation.terminus .rdot { width:17px; height:17px; background:var(--gtx); box-shadow:0 0 12px rgba(0,212,255,0.5); }
-  .rstation.seg-active .rdot { background:rgba(0,212,255,0.25); box-shadow:0 0 10px rgba(0,212,255,0.4); }
-  .rstation.wip .rdot { border-color:var(--muted); }
-  .rname { margin-top:9px; font-size:0.66rem; color:var(--muted); text-align:center; white-space:nowrap; font-weight:500; line-height:1.3; }
-  .rstation.terminus .rname { color:var(--text); font-weight:700; }
-  .rstation.seg-active .rname { color:var(--gtx); }
-  .wip-tag { color:var(--accent); font-size:0.58rem; display:block; }
-  .tabs { display:flex; gap:10px; margin-bottom:20px; }
-  .tab { flex:1; padding:13px 10px; text-align:center; background:var(--surface); border:1.5px solid var(--border); border-radius:12px; color:var(--muted); cursor:pointer; font-family:inherit; font-size:0.82rem; font-weight:700; transition:all 0.2s; line-height:1.4; }
-  .tab.active { background:rgba(0,212,255,0.08); border-color:var(--gtx); color:var(--gtx); box-shadow: var(--glow); }
-  .tab small { font-weight:400; font-size:0.72rem; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
-  .pill { flex:1; min-width:120px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 14px; display:flex; align-items:center; gap:10px; }
-  .pill-ico { font-size:1.1rem; }
-  .pill-info { display:flex; flex-direction:column; }
-  .pill-lbl { font-size:0.67rem; color:var(--muted); }
-  .pill-val { font-size:0.88rem; font-weight:700; }
-  .ctrl-row { display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
-  .dir-grp { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
-  .dir-btn { padding:9px 16px; font-family:inherit; font-size:0.78rem; font-weight:700; background:none; border:none; color:var(--muted); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-  .dir-btn.active { background:var(--gtx); color:#000; }
-  .next-card { background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(0,102,255,0.05)); border:1px solid rgba(0,212,255,0.22); border-radius:14px; padding:18px 20px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  .next-label { font-size:0.67rem; color:var(--gtx); letter-spacing:2px; font-weight:700; margin-bottom:6px; }
-  .next-time { font-family:'Space Mono',monospace; font-size:2.1rem; font-weight:700; line-height:1; }
-  .next-route { font-size:0.78rem; color:var(--muted); margin-top:5px; }
-  .cd-box { text-align:right; }
-  .cd-num { font-family:'Space Mono',monospace; font-size:1.6rem; font-weight:700; color:var(--gtx); }
-  .cd-lbl { font-size:0.72rem; color:var(--muted); }
-  .tbl-wrap { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:40px; }
-  .tbl-head { display:grid; background:var(--surface2); border-bottom:1px solid var(--border); }
-  .th { padding:11px 10px; font-size:0.67rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; font-weight:700; text-align:center; border-right:1px solid var(--border); }
-  .th:first-child { text-align:left; padding-left:16px; }
-  .th:last-child { border-right:none; }
-  .tbl-row { display:grid; border-bottom:1px solid rgba(255,255,255,0.035); cursor:pointer; transition:background 0.12s; }
-  .tbl-row:last-child { border-bottom:none; }
-  .tbl-row:hover { background:rgba(0,212,255,0.03); }
-  .tbl-row.is-next { background:rgba(0,212,255,0.05); border-left:3px solid var(--gtx); }
-  .tbl-row.is-past { opacity:0.32; }
-  .td { padding:13px 10px; font-family:'Space Mono',monospace; font-size:0.82rem; text-align:center; border-right:1px solid rgba(255,255,255,0.03); }
-  .td:first-child { text-align:left; padding-left:16px; color:var(--muted); font-size:0.75rem; }
-  .td:last-child { border-right:none; }
-  .next-badge { display:block; font-size:0.58rem; color:var(--gtx); letter-spacing:1px; margin-top:2px; font-family:'Noto Sans KR',sans-serif; }
-  @media(max-width:600px) { .hero h1 { font-size:1.35rem; } .next-time { font-size:1.5rem; } .tab { font-size:0.76rem; } }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#f5f6fa;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+header{position:sticky;top:0;background:#0b3d91;color:#fff;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.15);z-index:10}
+.title{font-size:17px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.now{font-size:13px;opacity:.95;margin-top:3px;line-height:1.4}
+.tabs{display:flex;gap:6px;margin-top:10px}
+.tab{flex:1;padding:8px;text-align:center;background:rgba(255,255,255,.12);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.tab.active{background:#fff;color:#0b3d91}
+.dir{display:flex;gap:6px;padding:10px 14px 4px}
+.dir button{flex:1;padding:10px;border:1px solid #cfd4de;background:#fff;border-radius:8px;font-size:13px;font-weight:600;color:#333;cursor:pointer}
+.dir button.active{background:#0b3d91;color:#fff;border-color:#0b3d91}
+.stations{display:flex;overflow-x:auto;padding:8px 10px;gap:6px;background:#fff;border-bottom:1px solid #e5e7ee;scrollbar-width:none}
+.stations::-webkit-scrollbar{display:none}
+.st{flex:0 0 auto;padding:7px 12px;border-radius:18px;background:#eef0f6;font-size:13px;font-weight:600;color:#333;white-space:nowrap;cursor:pointer;position:relative}
+.st.active{background:#ff6b35;color:#fff}
+.st.est::after{content:"~";position:absolute;top:-3px;right:-2px;font-size:10px;background:#999;color:#fff;border-radius:50%;width:14px;height:14px;line-height:14px;text-align:center}
+.st.active.est::after{background:#fff;color:#ff6b35}
+.hint{padding:8px 14px;font-size:11.5px;color:#666;line-height:1.5}
+.list{padding:0 10px 80px}
+.row{display:flex;align-items:center;background:#fff;border-radius:10px;margin:6px 0;padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row.past{opacity:.4}
+.row.next{background:#fff7ec;border:2px solid #ff6b35;box-shadow:0 2px 10px rgba(255,107,53,.3)}
+.tm{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.5px;min-width:78px}
+.row.next .tm{color:#ff6b35}
+.eta{margin-left:auto;font-size:13px;color:#666;text-align:right}
+.row.next .eta{color:#ff6b35;font-weight:700}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;background:#ff6b35;color:#fff;font-size:11px;font-weight:700;margin-left:8px;vertical-align:middle}
+.empty{text-align:center;padding:40px 20px;color:#999;font-size:14px}
+.foot{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-top:1px solid #e5e7ee;padding:8px 14px;font-size:11px;color:#888;text-align:center}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-badge">GTX-A</div>
-      <div class="logo-text">시간표</div>
-    </div>
-    <div class="clock" id="clock">--:--:--</div>
+  <div class="title"><span>🚄 GTX-A 시간표</span><span id="clock"></span></div>
+  <div class="now" id="status">…</div>
+  <div class="tabs">
+    <div class="tab active" data-seg="south">남부 (수서↔동탄)</div>
+    <div class="tab" data-seg="north">북부 (운정↔서울)</div>
   </div>
 </header>
 
-<div class="hero">
-  <div class="hero-inner">
-    <h1>수도권 광역급행철도<br><em>GTX-A</em> 노선</h1>
-    <div class="hero-sub">운정중앙 ↔ 서울역 &nbsp;·&nbsp; 수서 ↔ 동탄 &nbsp;·&nbsp; 최고 180km/h</div>
-  </div>
+<div class="dir">
+  <button data-dir="0" class="active"></button>
+  <button data-dir="1"></button>
 </div>
 
-<div class="section">
-  <div class="card">
-    <div class="card-label">노선도</div>
-    <div class="route-scroll">
-      <div class="route-line" id="routeLine"></div>
-    </div>
-  </div>
-</div>
-
-<div class="section" style="padding-top:20px; padding-bottom:0;">
-  <div class="tabs">
-    <button class="tab" onclick="setSeg('north')">🔵 북부 구간<br><small>운정중앙 ↔ 서울역</small></button>
-    <button class="tab active" onclick="setSeg('south')">🔵 남부 구간<br><small>수서 ↔ 동탄</small></button>
-  </div>
-  <div class="pills" id="pillsRow"></div>
-  <div class="ctrl-row">
-    <div class="dir-grp">
-      <button class="dir-btn" id="d0" onclick="setDir(0)">←</button>
-      <button class="dir-btn active" id="d1" onclick="setDir(1)">→</button>
-    </div>
-  </div>
-  <div class="next-card">
-    <div>
-      <div class="next-label">▶ NEXT TRAIN</div>
-      <div class="next-time" id="nt">--:--</div>
-      <div class="next-route" id="nr">--</div>
-    </div>
-    <div class="cd-box">
-      <div class="cd-num" id="cdn">--</div>
-      <div class="cd-lbl" id="cdl">분 후 출발</div>
-    </div>
-  </div>
-</div>
-
-<div class="section" style="padding-top:0; padding-bottom:40px;">
-  <div class="tbl-wrap" id="tblWrap"></div>
-</div>
+<div class="stations" id="stations"></div>
+<div class="hint" id="hint"></div>
+<div class="list" id="list"></div>
+<div class="foot">평일 기준 · 공식 시간표 (PDF) 반영 · ~ 표시역은 추정</div>
 
 <script>
-// ─── 시간표 데이터 (GTX-A 공식 홈페이지 기준) ───────────────────────────
-// 수서역 기준 출발 시각 목록 (수서→동탄 방향: dir=0, 동탄→수서 방향: dir=1)
-// PDF에서 각 역별 출발시각을 수서역 기준으로 정리
+const META = {"south": {"name": "남부 (수서↔동탄)", "stations": ["수서", "성남", "구성", "동탄"], "dirNames": ["↑ 동탄→수서 (상행)", "↓ 수서→동탄 (하행)"], "endpoints": {"0": {"first": "05:30", "last": "00:27", "origin": "동탄", "dest": "수서"}, "1": {"first": "05:45", "last": "00:39", "origin": "수서", "dest": "동탄"}}}, "north": {"name": "북부 (운정↔서울)", "stations": ["운정중앙", "킨텍스", "대곡", "연신내", "서울역"], "dirNames": ["↑ 서울→운정중앙", "↓ 운정중앙→서울"], "endpoints": {"0": {"first": "05:30", "last": "00:38", "origin": "서울역", "dest": "운정중앙"}, "1": {"first": "05:30", "last": "00:38", "origin": "운정중앙", "dest": "서울역"}}}};
+const TT = {"north|0|서울역": {"origin": true, "times": {"5": [30, 45], "6": [0, 10, 20, 30, 36, 42, 48, 55], "7": [1, 7, 13, 20, 26, 32, 38, 45, 51, 57], "8": [3, 10, 16, 22, 28, 35, 41, 47, 53], "9": [0, 6, 12, 18, 25, 33, 41, 49, 57], "10": [5, 13, 21, 30, 40, 50], "11": [0, 10, 20, 30, 40, 50], "12": [0, 10, 20, 30, 40, 50], "13": [0, 10, 20, 30, 40, 50], "14": [0, 10, 18, 26, 34, 42, 50, 58], "15": [6, 14, 22, 30, 38, 46, 54], "16": [2, 10, 18, 26, 34, 42, 50, 57], "17": [4, 10, 16, 22, 29, 35, 41, 47, 54], "18": [0, 6, 12, 19, 25, 31, 37, 44, 50, 56], "19": [2, 9, 15, 21, 27, 34, 40, 46, 52, 59], "20": [7, 15, 23, 31, 39, 47, 55], "21": [3, 11, 19, 27, 35, 43, 51], "22": [0, 10, 20, 30, 40, 55], "23": [10, 25, 40, 55], "24": [10, 25, 38]}}, "north|1|운정중앙": {"origin": true, "times": {"5": [30, 40, 50], "6": [0, 6, 12, 18, 25, 31, 37, 43, 50, 56], "7": [2, 8, 15, 21, 27, 33, 40, 46, 52, 58], "8": [5, 11, 17, 23, 30, 36, 42, 48, 55], "9": [3, 11, 19, 27, 35, 43, 51], "10": [0, 10, 20, 30, 40, 50], "11": [0, 10, 20, 30, 40, 50], "12": [0, 10, 20, 30, 40, 50], "13": [0, 10, 20, 30, 40, 48, 56], "14": [4, 12, 20, 28, 36, 44, 52], "15": [0, 8, 16, 24, 32, 40, 48, 56], "16": [4, 12, 20, 27, 34, 40, 46, 52, 59], "17": [5, 11, 17, 24, 30, 36, 42, 49, 55], "18": [1, 7, 14, 20, 26, 32, 39, 45, 51, 57], "19": [4, 10, 16, 22, 29, 37, 45, 53], "20": [1, 9, 17, 25, 33, 41, 49, 57], "21": [5, 13, 21, 30, 40, 50], "22": [0, 10, 20, 30, 45], "23": [0, 15, 30, 45], "24": [0, 18, 38]}}, "south|0|동탄": {"origin": true, "times": {"5": [30, 49], "6": [9, 26, 43], "7": [2, 22, 36, 55], "8": [14, 28, 44], "9": [0, 18, 30, 50], "10": [14, 30, 50], "11": [12, 36], "12": [5, 32, 55], "13": [12, 22, 47], "14": [9, 24, 45], "15": [10, 28, 38, 58], "16": [10, 33, 49], "17": [7, 26, 44], "18": [6, 19, 43], "19": [0, 15, 29, 46], "20": [0, 35, 47], "21": [0, 17, 31, 44], "22": [15, 37], "23": [12, 39], "24": [6, 27]}}, "south|0|구성": {"origin": true, "times": {"5": [37, 56], "6": [16, 33, 50], "7": [9, 29, 43], "8": [2, 21, 35, 51], "9": [7, 25, 37, 57], "10": [21, 37, 57], "11": [19, 43], "12": [12, 39], "13": [2, 19, 29, 54], "14": [16, 31, 52], "15": [17, 35, 45], "16": [5, 17, 40, 56], "17": [14, 33, 51], "18": [13, 26, 50], "19": [7, 22, 36, 53], "20": [7, 42, 54], "21": [7, 24, 38, 51], "22": [22, 44], "23": [19, 46], "24": [13, 34]}}, "south|1|수서": {"origin": true, "times": {"5": [45], "6": [4, 13, 21, 44], "7": [9, 29, 46], "8": [9, 21, 35, 49], "9": [10, 27, 47], "10": [4, 10, 36], "11": [4, 30, 50], "12": [9, 32, 41], "13": [14, 34, 46], "14": [0, 20, 45], "15": [10, 33, 47], "16": [2, 25, 43, 59], "17": [15, 34, 47], "18": [10, 28, 42, 51], "19": [28, 46], "20": [4, 19, 35, 50], "21": [12, 32, 50], "22": [8, 30], "23": [0, 25, 50], "24": [15, 39]}}, "south|1|구성": {"origin": true, "times": {"5": [59], "6": [18, 27, 35, 58], "7": [23, 43], "8": [0, 23, 35, 49], "9": [3, 24, 41], "10": [1, 18, 24, 50], "11": [18, 44], "12": [4, 23, 46, 55], "13": [28, 48], "14": [0, 14, 34, 59], "15": [24, 47], "16": [1, 16, 39, 57], "17": [13, 29, 48], "18": [1, 24, 42, 56], "19": [5, 42], "20": [0, 18, 33, 49], "21": [4, 26, 46], "22": [4, 22, 44], "23": [14, 39], "24": [4, 29, 53]}}, "north|0|연신내": {"origin": false, "times": {"5": [36, 51], "6": [6, 16, 26, 36, 42, 48, 54], "7": [1, 7, 13, 19, 26, 32, 38, 44, 51, 57], "8": [3, 9, 16, 22, 28, 34, 41, 47, 53, 59], "9": [6, 12, 18, 24, 31, 39, 47, 55], "10": [3, 11, 19, 27, 36, 46, 56], "11": [6, 16, 26, 36, 46, 56], "12": [6, 16, 26, 36, 46, 56], "13": [6, 16, 26, 36, 46, 56], "14": [6, 16, 24, 32, 40, 48, 56], "15": [4, 12, 20, 28, 36, 44, 52], "16": [0, 8, 16, 24, 32, 40, 48, 56], "17": [3, 10, 16, 22, 28, 35, 41, 47, 53], "18": [0, 6, 12, 18, 25, 31, 37, 43, 50, 56], "19": [2, 8, 15, 21, 27, 33, 40, 46, 52, 58], "20": [5, 13, 21, 29, 37, 45, 53], "21": [1, 9, 17, 25, 33, 41, 49, 57], "22": [6, 16, 26, 36, 46], "23": [1, 16, 31, 46], "24": [1, 16, 31, 44]}, "from": "서울역", "off": 6}, "north|0|대곡": {"origin": false, "times": {"5": [43, 58], "6": [13, 23, 33, 43, 49, 55], "7": [1, 8, 14, 20, 26, 33, 39, 45, 51, 58], "8": [4, 10, 16, 23, 29, 35, 41, 48, 54], "9": [0, 6, 13, 19, 25, 31, 38, 46, 54], "10": [2, 10, 18, 26, 34, 43, 53], "11": [3, 13, 23, 33, 43, 53], "12": [3, 13, 23, 33, 43, 53], "13": [3, 13, 23, 33, 43, 53], "14": [3, 13, 23, 31, 39, 47, 55], "15": [3, 11, 19, 27, 35, 43, 51, 59], "16": [7, 15, 23, 31, 39, 47, 55], "17": [3, 10, 17, 23, 29, 35, 42, 48, 54], "18": [0, 7, 13, 19, 25, 32, 38, 44, 50, 57], "19": [3, 9, 15, 22, 28, 34, 40, 47, 53, 59], "20": [5, 12, 20, 28, 36, 44, 52], "21": [0, 8, 16, 24, 32, 40, 48, 56], "22": [4, 13, 23, 33, 43, 53], "23": [8, 23, 38, 53], "24": [8, 23, 38, 51]}, "from": "서울역", "off": 13}, "north|0|킨텍스": {"origin": false, "times": {"5": [47], "6": [2, 17, 27, 37, 47, 53, 59], "7": [5, 12, 18, 24, 30, 37, 43, 49, 55], "8": [2, 8, 14, 20, 27, 33, 39, 45, 52, 58], "9": [4, 10, 17, 23, 29, 35, 42, 50, 58], "10": [6, 14, 22, 30, 38, 47, 57], "11": [7, 17, 27, 37, 47, 57], "12": [7, 17, 27, 37, 47, 57], "13": [7, 17, 27, 37, 47, 57], "14": [7, 17, 27, 35, 43, 51, 59], "15": [7, 15, 23, 31, 39, 47, 55], "16": [3, 11, 19, 27, 35, 43, 51, 59], "17": [7, 14, 21, 27, 33, 39, 46, 52, 58], "18": [4, 11, 17, 23, 29, 36, 42, 48, 54], "19": [1, 7, 13, 19, 26, 32, 38, 44, 51, 57], "20": [3, 9, 16, 24, 32, 40, 48, 56], "21": [4, 12, 20, 28, 36, 44, 52], "22": [0, 8, 17, 27, 37, 47, 57], "23": [12, 27, 42, 57], "24": [12, 27, 42, 55]}, "from": "서울역", "off": 17}, "north|0|운정중앙": {"origin": false, "times": {"5": [51], "6": [6, 21, 31, 41, 51, 57], "7": [3, 9, 16, 22, 28, 34, 41, 47, 53, 59], "8": [6, 12, 18, 24, 31, 37, 43, 49, 56], "9": [2, 8, 14, 21, 27, 33, 39, 46, 54], "10": [2, 10, 18, 26, 34, 42, 51], "11": [1, 11, 21, 31, 41, 51], "12": [1, 11, 21, 31, 41, 51], "13": [1, 11, 21, 31, 41, 51], "14": [1, 11, 21, 31, 39, 47, 55], "15": [3, 11, 19, 27, 35, 43, 51, 59], "16": [7, 15, 23, 31, 39, 47, 55], "17": [3, 11, 18, 25, 31, 37, 43, 50, 56], "18": [2, 8, 15, 21, 27, 33, 40, 46, 52, 58], "19": [5, 11, 17, 23, 30, 36, 42, 48, 55], "20": [1, 7, 13, 20, 28, 36, 44, 52], "21": [0, 8, 16, 24, 32, 40, 48, 56], "22": [4, 12, 21, 31, 41, 51], "23": [1, 16, 31, 46], "24": [1, 16, 31, 46, 59]}, "from": "서울역", "off": 21}, "north|1|킨텍스": {"origin": false, "times": {"5": [34, 44, 54], "6": [4, 10, 16, 22, 29, 35, 41, 47, 54], "7": [0, 6, 12, 19, 25, 31, 37, 44, 50, 56], "8": [2, 9, 15, 21, 27, 34, 40, 46, 52, 59], "9": [7, 15, 23, 31, 39, 47, 55], "10": [4, 14, 24, 34, 44, 54], "11": [4, 14, 24, 34, 44, 54], "12": [4, 14, 24, 34, 44, 54], "13": [4, 14, 24, 34, 44, 52], "14": [0, 8, 16, 24, 32, 40, 48, 56], "15": [4, 12, 20, 28, 36, 44, 52], "16": [0, 8, 16, 24, 31, 38, 44, 50, 56], "17": [3, 9, 15, 21, 28, 34, 40, 46, 53, 59], "18": [5, 11, 18, 24, 30, 36, 43, 49, 55], "19": [1, 8, 14, 20, 26, 33, 41, 49, 57], "20": [5, 13, 21, 29, 37, 45, 53], "21": [1, 9, 17, 25, 34, 44, 54], "22": [4, 14, 24, 34, 49], "23": [4, 19, 34, 49], "24": [4, 22, 42]}, "from": "운정중앙", "off": 4}, "north|1|대곡": {"origin": false, "times": {"5": [38, 48, 58], "6": [8, 14, 20, 26, 33, 39, 45, 51, 58], "7": [4, 10, 16, 23, 29, 35, 41, 48, 54], "8": [0, 6, 13, 19, 25, 31, 38, 44, 50, 56], "9": [3, 11, 19, 27, 35, 43, 51, 59], "10": [8, 18, 28, 38, 48, 58], "11": [8, 18, 28, 38, 48, 58], "12": [8, 18, 28, 38, 48, 58], "13": [8, 18, 28, 38, 48, 56], "14": [4, 12, 20, 28, 36, 44, 52], "15": [0, 8, 16, 24, 32, 40, 48, 56], "16": [4, 12, 20, 28, 35, 42, 48, 54], "17": [0, 7, 13, 19, 25, 32, 38, 44, 50, 57], "18": [3, 9, 15, 22, 28, 34, 40, 47, 53, 59], "19": [5, 12, 18, 24, 30, 37, 45, 53], "20": [1, 9, 17, 25, 33, 41, 49, 57], "21": [5, 13, 21, 29, 38, 48, 58], "22": [8, 18, 28, 38, 53], "23": [8, 23, 38, 53], "24": [8, 26, 46]}, "from": "운정중앙", "off": 8}, "north|1|연신내": {"origin": false, "times": {"5": [45, 55], "6": [5, 15, 21, 27, 33, 40, 46, 52, 58], "7": [5, 11, 17, 23, 30, 36, 42, 48, 55], "8": [1, 7, 13, 20, 26, 32, 38, 45, 51, 57], "9": [3, 10, 18, 26, 34, 42, 50, 58], "10": [6, 15, 25, 35, 45, 55], "11": [5, 15, 25, 35, 45, 55], "12": [5, 15, 25, 35, 45, 55], "13": [5, 15, 25, 35, 45, 55], "14": [3, 11, 19, 27, 35, 43, 51, 59], "15": [7, 15, 23, 31, 39, 47, 55], "16": [3, 11, 19, 27, 35, 42, 49, 55], "17": [1, 7, 14, 20, 26, 32, 39, 45, 51, 57], "18": [4, 10, 16, 22, 29, 35, 41, 47, 54], "19": [0, 6, 12, 19, 25, 31, 37, 44, 52], "20": [0, 8, 16, 24, 32, 40, 48, 56], "21": [4, 12, 20, 28, 36, 45, 55], "22": [5, 15, 25, 35, 45], "23": [0, 15, 30, 45], "24": [0, 15, 33, 53]}, "from": "운정중앙", "off": 15}, "north|1|서울역": {"origin": false, "times": {"5": [51], "6": [1, 11, 21, 27, 33, 39, 46, 52, 58], "7": [4, 11, 17, 23, 29, 36, 42, 48, 54], "8": [1, 7, 13, 19, 26, 32, 38, 44, 51, 57], "9": [3, 9, 16, 24, 32, 40, 48, 56], "10": [4, 12, 21, 31, 41, 51], "11": [1, 11, 21, 31, 41, 51], "12": [1, 11, 21, 31, 41, 51], "13": [1, 11, 21, 31, 41, 51], "14": [1, 9, 17, 25, 33, 41, 49, 57], "15": [5, 13, 21, 29, 37, 45, 53], "16": [1, 9, 17, 25, 33, 41, 48, 55], "17": [1, 7, 13, 20, 26, 32, 38, 45, 51, 57], "18": [3, 10, 16, 22, 28, 35, 41, 47, 53], "19": [0, 6, 12, 18, 25, 31, 37, 43, 50, 58], "20": [6, 14, 22, 30, 38, 46, 54], "21": [2, 10, 18, 26, 34, 42, 51], "22": [1, 11, 21, 31, 41, 51], "23": [6, 21, 36, 51], "24": [6, 21, 39, 59]}, "from": "운정중앙", "off": 21}, "south|0|성남": {"origin": false, "times": {"5": [42], "6": [1, 21, 38, 55], "7": [14, 34, 48], "8": [7, 26, 40, 56], "9": [12, 30, 42], "10": [2, 26, 42], "11": [2, 24, 48], "12": [17, 44], "13": [7, 24, 34, 59], "14": [21, 36, 57], "15": [22, 40, 50], "16": [10, 22, 45], "17": [1, 19, 38, 56], "18": [18, 31, 55], "19": [12, 27, 41, 58], "20": [12, 47, 59], "21": [12, 29, 43, 56], "22": [27, 49], "23": [24, 51], "24": [18, 39]}, "from": "구성", "off": 5}, "south|0|수서": {"origin": false, "times": {"5": [49], "6": [8, 28, 45], "7": [2, 21, 41, 55], "8": [14, 33, 47], "9": [3, 19, 37, 49], "10": [9, 33, 49], "11": [9, 31, 55], "12": [24, 51], "13": [14, 31, 41], "14": [6, 28, 43], "15": [4, 29, 47, 57], "16": [17, 29, 52], "17": [8, 26, 45], "18": [3, 25, 38], "19": [2, 19, 34, 48], "20": [5, 19, 54], "21": [6, 19, 36, 50], "22": [3, 34, 56], "23": [31, 58], "24": [25, 46]}, "from": "구성", "off": 12}, "south|1|성남": {"origin": false, "times": {"5": [51], "6": [10, 19, 27, 50], "7": [15, 35, 52], "8": [15, 27, 41, 55], "9": [16, 33, 53], "10": [10, 16, 42], "11": [10, 36, 56], "12": [15, 38, 47], "13": [20, 40, 52], "14": [6, 26, 51], "15": [16, 39, 53], "16": [8, 31, 49], "17": [5, 21, 40, 53], "18": [16, 34, 48, 57], "19": [34, 52], "20": [10, 25, 41, 56], "21": [18, 38, 56], "22": [14, 36], "23": [6, 31, 56], "24": [21, 45]}, "from": "수서", "off": 6}, "south|1|동탄": {"origin": false, "times": {"6": [4, 23, 32, 40], "7": [3, 28, 48], "8": [5, 28, 40, 54], "9": [8, 29, 46], "10": [6, 23, 29, 55], "11": [23, 49], "12": [9, 28, 51], "13": [0, 33, 53], "14": [5, 19, 39], "15": [4, 29, 52], "16": [6, 21, 44], "17": [2, 18, 34, 53], "18": [6, 29, 47], "19": [1, 10, 47], "20": [5, 23, 38, 54], "21": [9, 31, 51], "22": [9, 27, 49], "23": [19, 44], "24": [9, 34, 58]}, "from": "수서", "off": 19}};
 
-// 남부구간: 수서(기준) → 성남(+6) → 구성(+12) → 동탄(+19)
-// 반대방향: 동탄 기준, 동탄→구성(+7)→성남(+13)→수서(+19)
+let state = { seg:"south", dir:1, station:"수서" };
 
-// 수서역 출발 시각 (수서→동탄)
-const SUSEO_TO_DONGTAN = [
-  '05:31',
-  '06:04','06:23','06:40','06:57',
-  '07:08','07:25','07:42','07:57',
-  '08:09','08:26','08:43','08:57',
-  '09:10','09:27','09:47',
-  '10:04','10:28','10:36',
-  '11:04','11:30','11:50',
-  '12:08','12:32','12:41',
-  '13:14','13:34','13:46',
-  '14:00','14:20','14:44',
-  '15:10','15:31','15:47',
-  '16:05','16:17','16:40','16:56',
-  '17:03','17:21','17:40','17:50',
-  '18:10','18:28','18:40','18:51',
-  '19:14','19:29','19:43',
-  '20:04','20:19','20:35','20:50',
-  '21:01','21:14','21:31','21:45',
-  '22:08','22:30',
-  '23:00','23:25','23:50',
-  '00:15','막차00:39'
-].filter(t=>!t.startsWith('막차')).concat(['00:39']);
+const $list=document.getElementById('list');
+const $stations=document.getElementById('stations');
+const $status=document.getElementById('status');
+const $clock=document.getElementById('clock');
+const $hint=document.getElementById('hint');
 
-// 동탄역 출발 시각 (동탄→수서)
-const DONGTAN_TO_SUSEO = [
-  '05:30',
-  '06:11','06:37','06:55',
-  '07:07','07:16','07:35','07:54',
-  '08:02','08:19','08:40','08:55',
-  '09:11','09:17','09:42',
-  '10:11','10:17','10:42',
-  '11:18','11:43',
-  '12:04','12:23','12:46','12:55',
-  '13:21','13:41','13:53',
-  '14:07','14:17','14:42',
-  '15:24','15:47',
-  '16:05','16:16','16:40','16:57',
-  '17:07','17:13','17:43',
-  '18:01','18:24','18:43','18:56',
-  '19:05','19:42',
-  '20:00','20:15','20:31','20:44',
-  '21:01','21:17','21:28','21:44',
-  '22:04','22:22','22:37',
-  '23:07','23:32','23:53',
-  '00:06','막차00:27'
-].filter(t=>!t.startsWith('막차')).concat(['00:27']);
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick=()=>{
+    state.seg=t.dataset.seg;
+    state.dir = state.seg==="south" ? 1 : 1;
+    state.station = META[state.seg].endpoints[state.dir].origin;
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+    setupDir(); renderStations(); render();
+  };
+});
+document.querySelectorAll('.dir button').forEach(b=>{
+  b.onclick=()=>{
+    state.dir=+b.dataset.dir;
+    state.station = META[state.seg].endpoints[state.dir].origin;
+    document.querySelectorAll('.dir button').forEach(x=>x.classList.toggle('active',x===b));
+    renderStations(); render();
+  };
+});
 
-// 북부구간: 운정중앙 → 킨텍스(+7) → 대곡(+12) → 연신내(+20) → 서울역(+26)
-// 서울역 → 연신내(+6) → 대곡(+12) → 킨텍스(+20) → 운정중앙(+26) [반대방향]
-
-// 운정중앙 출발 시각 (운정중앙→서울역)
-const UNJUNG_TO_SEOUL = [
-  '05:30','05:40','05:50',
-  '06:00','06:05','06:12','06:18','06:25','06:31','06:37','06:43','06:50','06:56',
-  '07:02','07:08','07:13','07:15','07:21','07:24','07:27','07:33','07:37','07:40','07:46','07:49','07:52','07:57',
-  '08:05','08:11','08:17','08:23','08:28','08:36','08:42','08:48','08:55',
-  '09:03','09:11','09:19','09:27','09:35','09:43','09:51',
-  '10:00','10:10','10:20','10:30','10:40','10:50',
-  '11:00','11:10','11:20','11:30','11:40','11:50',
-  '12:00','12:10','12:20','12:30','12:40','12:50',
-  '13:00','13:10','13:20','13:30','13:40','13:50',
-  '14:04','14:12','14:20','14:28','14:36','14:46',
-  '15:00','15:08','15:16','15:24','15:32','15:40','15:48','15:56',
-  '16:04','16:12','16:20','16:27','16:34','16:40','16:46','16:52','16:59',
-  '17:05','17:11','17:17','17:24','17:30','17:36','17:42','17:49','17:55',
-  '18:01','18:07','18:11','18:14','18:17','18:20','18:22','18:25','18:28','18:31','18:34','18:37','18:42','18:48','18:54',
-  '19:01','19:07','19:13','19:26','19:38','19:50',
-  '20:01','20:09','20:17','20:25','20:33','20:41','20:49','20:57',
-  '21:05','21:13','21:21','21:30','21:40','21:50',
-  '22:00','22:10','22:20','22:30','22:40','22:50',
-  '23:00','23:10','23:20','23:30','23:40','23:50',
-  '00:00','00:10','00:18','막차00:36'
-].filter(t=>!t.startsWith('막차')).concat(['00:36']);
-
-// 서울역 출발 시각 (서울역→운정중앙)
-const SEOUL_TO_UNJUNG = [
-  '05:30',
-  '06:00','06:10','06:20','06:30','06:38','06:42','06:48','06:52','06:56',
-  '07:01','07:07','07:13','07:16','07:20','07:22','07:25','07:28','07:31','07:35','07:41','07:44','07:47','07:53','07:57',
-  '08:01','08:05','08:10','08:15','08:22','08:28','08:35','08:41','08:47','08:53',
-  '09:00','09:07','09:13','09:20','09:27','09:33','09:40','09:47','09:53',
-  '10:00','10:10','10:20','10:30','10:40','10:50',
-  '11:00','11:10','11:20','11:30','11:40','11:50',
-  '12:00','12:10','12:20','12:30','12:40','12:50',
-  '13:00','13:10','13:20','13:30','13:40','13:50',
-  '14:00','14:08','14:16','14:24','14:32','14:42','14:52',
-  '15:00','15:08','15:16','15:24','15:32','15:40','15:46','15:54',
-  '16:02','16:10','16:18','16:24','16:30','16:36','16:42','16:48','16:54',
-  '17:00','17:06','17:12','17:18','17:24','17:31','17:37','17:43','17:54',
-  '18:00','18:06','18:12','18:18','18:25','18:31','18:37','18:43','18:49','18:55',
-  '19:04','19:13','19:20','19:29','19:38','19:47','19:56',
-  '20:04','20:11','20:19','20:27','20:35','20:43','20:52',
-  '21:00','21:09','21:17','21:26','21:35','21:45','21:55',
-  '22:05','22:15','22:25','22:35','22:45','22:55',
-  '23:05','23:15','23:25','23:35','23:45','23:55',
-  '00:05','00:15','막차00:38'
-].filter(t=>!t.startsWith('막차')).concat(['00:38']);
-
-const DATA = {
-  north: {
-    label: '북부 구간',
-    pills: [
-      { ico:'🚉', lbl:'운행 역수', val:'5개역' },
-      { ico:'⚡', lbl:'최고속도', val:'180 km/h' },
-      { ico:'⏱', lbl:'전구간 소요', val:'약 26분' },
-      { ico:'🔄', lbl:'첨두 배차', val:'약 6분' },
-    ],
-    dirs: ['← 서울역 방향', '운정중앙 방향 →'],
-    // dir=0: 운정중앙→서울, dir=1: 서울→운정중앙
-    stations: [['운정중앙','킨텍스','대곡','연신내','서울역'],['서울역','연신내','대곡','킨텍스','운정중앙']],
-    tMin: [[0,7,12,20,26],[0,6,12,20,26]],
-    sch: { 0: UNJUNG_TO_SEOUL, 1: SEOUL_TO_UNJUNG }
-  },
-  south: {
-    label: '남부 구간',
-    pills: [
-      { ico:'🚉', lbl:'운행 역수', val:'4개역' },
-      { ico:'⚡', lbl:'최고속도', val:'180 km/h' },
-      { ico:'⏱', lbl:'전구간 소요', val:'약 19분' },
-      { ico:'🔄', lbl:'평시 배차', val:'약 15~30분' },
-    ],
-    dirs: ['← 동탄 방향', '수서 방향 →'],
-    // dir=0: 수서→동탄, dir=1: 동탄→수서
-    stations: [['수서','성남','구성','동탄'],['동탄','구성','성남','수서']],
-    tMin: [[0,6,12,19],[0,7,13,19]],
-    sch: { 0: SUSEO_TO_DONGTAN, 1: DONGTAN_TO_SUSEO }
-  }
-};
-
-let seg='south', dir=1;
-
-function toMin(t) {
-  let [h,m]=t.split(':').map(Number);
-  if(h<5) h+=24;
-  return h*60+m;
-}
-function addM(t,m) {
-  let [h,mn]=t.split(':').map(Number);
-  let tot=h*60+mn+m;
-  return String(Math.floor(tot/60)%24).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
-}
-function nowMin() { const d=new Date(); return d.getHours()*60+d.getMinutes(); }
-
-const ALL_STATIONS=[
-  {n:'운정중앙',s:'north'},{n:'킨텍스',s:'north'},{n:'대곡',s:'north'},{n:'연신내',s:'north'},
-  {n:'서울역',s:'both'},{n:'삼성',s:'wip',wip:true},
-  {n:'수서',s:'south'},{n:'성남',s:'south'},{n:'구성',s:'south'},{n:'동탄',s:'south'},
-];
-
-function buildRoute() {
-  const el=document.getElementById('routeLine'); el.innerHTML='';
-  ALL_STATIONS.forEach((st,i)=>{
-    const node=document.createElement('div');
-    const isTerm=(i===0||i===ALL_STATIONS.length-1);
-    const isActive=(seg==='north'&&st.s==='north')||(seg==='south'&&st.s==='south')||st.s==='both';
-    node.className='rstation'+(isTerm?' terminus':'')+(isActive?' seg-active':'')+(st.wip?' wip':'');
-    const lineL=i>0?`<div class="rdot-line${ALL_STATIONS[i-1].wip||st.wip?' gap':''}"></div>`:'<div class="rdot-line hidden"></div>';
-    const lineR=i<ALL_STATIONS.length-1?`<div class="rdot-line${st.wip?' gap':''}"></div>`:'<div class="rdot-line hidden"></div>';
-    node.innerHTML=`<div class="rdot-wrap">${lineL}<div class="rdot"></div>${lineR}</div><div class="rname">${st.n}${st.wip?'<span class="wip-tag">공사중</span>':''}</div>`;
-    el.appendChild(node);
+function setupDir(){
+  const btns=document.querySelectorAll('.dir button');
+  btns.forEach((b,i)=>{
+    b.textContent=META[state.seg].dirNames[i];
+    b.classList.toggle('active', i===state.dir);
   });
 }
 
-function buildPills() {
-  const d=DATA[seg];
-  document.getElementById('pillsRow').innerHTML=d.pills.map(p=>
-    `<div class="pill"><span class="pill-ico">${p.ico}</span><div class="pill-info"><div class="pill-lbl">${p.lbl}</div><div class="pill-val">${p.val}</div></div></div>`
-  ).join('');
+function renderStations(){
+  $stations.innerHTML='';
+  META[state.seg].stations.forEach(s=>{
+    const key=`${state.seg}|${state.dir}|${s}`;
+    const info=TT[key];
+    const el=document.createElement('div');
+    el.className='st'+(s===state.station?' active':'')+(info && !info.origin?' est':'');
+    el.textContent=s;
+    el.onclick=()=>{ state.station=s; renderStations(); render(); };
+    $stations.appendChild(el);
+  });
+  const ep=META[state.seg].endpoints[state.dir];
+  $hint.innerHTML=`${ep.origin} 첫차 ${ep.first} · 막차 ${ep.last} <br>역 칩을 탭하면 그 역 기준으로 가까운 열차가 강조됩니다. <span style="color:#999">~ 표시 = 통과 시각 추정</span>`;
 }
 
-function buildDirBtns() {
-  const d=DATA[seg];
-  document.getElementById('d0').textContent=d.dirs[0];
-  document.getElementById('d1').textContent=d.dirs[1];
-  document.getElementById('d0').className='dir-btn'+(dir===0?' active':'');
-  document.getElementById('d1').className='dir-btn'+(dir===1?' active':'');
+function pad(n){return String(n).padStart(2,'0');}
+function fmt(h,m){return pad(h%24)+':'+pad(m);}
+
+function buildTrains(){
+  const key=`${state.seg}|${state.dir}|${state.station}`;
+  const info=TT[key];
+  if(!info) return {trains:[],estimated:false};
+  const out=[];
+  for(const h in info.times){
+    for(const m of info.times[h]){
+      const hh=+h, mm=+m;
+      // hh가 24,25 등이면 다음날 시각으로 처리
+      out.push({h:hh, m:mm, key:hh*60+mm, lastTrain:false});
+    }
+  }
+  out.sort((a,b)=>a.key-b.key);
+  return {trains:out, estimated: !info.origin};
 }
 
-function buildTable() {
-  const d=DATA[seg];
-  const sch=d.sch[dir];
-  const stas=d.stations[dir];
-  const tms=d.tMin[dir];
-  const nm=nowMin();
+function render(){
+  setupDir();
+  const {trains, estimated} = buildTrains();
+  const now=new Date();
+  // 현재시각을 분 단위로. 새벽 0~4시는 "전일 24~28시"로 매핑하여 막차까지 비교
+  let nowKey = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+  if(now.getHours() < 5) nowKey += 24*60; // 0~4시는 전일 24~28시로 간주
 
-  let nextIdx=-1;
-  for(let i=0;i<sch.length;i++){
-    if(toMin(sch[i])>=nm){nextIdx=i;break;}
+  let nextIdx = trains.findIndex(t=>t.key>=nowKey);
+  if(nextIdx===-1) nextIdx=trains.length;
+
+  $list.innerHTML='';
+  if(trains.length===0){
+    $list.innerHTML='<div class="empty">해당 역의 시간표가 없습니다.</div>';
+    $status.textContent='운행 정보 없음';
+    return;
   }
 
-  if(nextIdx>=0){
-    const dep=sch[nextIdx];
-    const diff=toMin(dep)-nm;
-    document.getElementById('nt').textContent=dep;
-    document.getElementById('nr').textContent=`${stas[0]} 출발 → ${stas[stas.length-1]} 도착 ${addM(dep,tms[tms.length-1])}`;
-    document.getElementById('cdn').textContent=diff===0?'지금':diff;
-    document.getElementById('cdl').textContent=diff===0?'출발!':'분 후 출발';
+  trains.forEach((t,i)=>{
+    const row=document.createElement('div');
+    row.className='row '+(i<nextIdx?'past':(i===nextIdx?'next':''));
+    const eta=t.key-nowKey;
+    let etaText='';
+    if(i===nextIdx){
+      if(eta<1) etaText='곧 도착';
+      else if(eta<60) etaText=`${Math.ceil(eta)}분 후`;
+      else etaText=`${Math.floor(eta/60)}시간 ${Math.ceil(eta%60)}분 후`;
+    } else if(i<nextIdx){ etaText='지났음'; }
+    row.innerHTML=`<div class="tm">${fmt(t.h,t.m)}${i===nextIdx?'<span class="badge">NEXT</span>':''}</div><div class="eta">${etaText}</div>`;
+    $list.appendChild(row);
+  });
+
+  if(nextIdx<trains.length){
+    const t=trains[nextIdx];
+    const eta=t.key-nowKey;
+    const etaT=eta<1?'곧 도착':(eta<60?`${Math.ceil(eta)}분 후`:`${Math.floor(eta/60)}시간 ${Math.ceil(eta%60)}분 후`);
+    const dest=META[state.seg].endpoints[state.dir].dest;
+    const est = estimated ? ' (추정)' : '';
+    $status.innerHTML=`${state.station}역${est} → ${dest} 방면<br><b>다음 ${fmt(t.h,t.m)}</b> · ${etaT}`;
   } else {
-    document.getElementById('nt').textContent='운행 종료';
-    document.getElementById('nr').textContent='오늘 운행이 종료되었습니다';
-    document.getElementById('cdn').textContent='--';
-    document.getElementById('cdl').textContent='';
+    $status.textContent=`${state.station}역 · 금일 운행 종료 (내일 첫차 대기)`;
   }
 
-  const colsFr=stas.map(()=>'1fr').join(' ');
-  const gridCols=`80px ${colsFr}`;
-  const s=Math.max(0,nextIdx-4);
-  const e=Math.min(sch.length,nextIdx+28);
-
-  let html=`<div class="tbl-head" style="grid-template-columns:${gridCols}">
-    <div class="th" style="text-align:left">열차</div>
-    ${stas.map(s=>`<div class="th">${s}</div>`).join('')}
-  </div>`;
-
-  for(let i=s;i<e;i++){
-    const dep=sch[i];
-    const dm=toMin(dep);
-    const past=dm<nm, next=i===nextIdx;
-    const times=stas.map((_,si)=>addM(dep,tms[si]));
-    html+=`<div class="tbl-row${next?' is-next':''}${past?' is-past':''}" style="grid-template-columns:${gridCols}">
-      <div class="td">${String(i+1).padStart(3,'0')}${next?'<span class="next-badge">▶ NEXT</span>':''}</div>
-      ${times.map(t=>`<div class="td">${t}</div>`).join('')}
-    </div>`;
-  }
-
-  document.getElementById('tblWrap').innerHTML=html;
+  const nextEl=$list.children[nextIdx];
+  if(nextEl) setTimeout(()=>nextEl.scrollIntoView({block:'center',behavior:'smooth'}), 100);
 }
-
-function setSeg(s) {
-  seg=s; dir=(s==='south'?1:0);
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&s==='north')||(i===1&&s==='south')));
-  buildRoute(); buildPills(); buildDirBtns(); buildTable();
-}
-function setDir(d){ dir=d; buildDirBtns(); buildTable(); }
 
 function tick(){
-  const n=new Date();
-  document.getElementById('clock').textContent=
-    String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
+  const d=new Date();
+  $clock.textContent=fmt(d.getHours(),d.getMinutes())+':'+pad(d.getSeconds());
 }
 
-buildRoute(); buildPills(); buildDirBtns(); buildTable();
-tick(); setInterval(tick,1000);
-setInterval(buildTable,30000);
+// 초기: 남부 하행, 수서역 (사용자가 가장 쓸 가능성 높은 케이스)
+state.seg="south"; state.dir=1; state.station="수서";
+setupDir(); renderStations(); render();
+tick();
+setInterval(tick,1000);
+setInterval(render,30000);
 </script>
 </body>
 </html>
