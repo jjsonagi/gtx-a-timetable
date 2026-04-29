@@ -268,10 +268,10 @@
 <div class="section" style="padding-top:20px; padding-bottom:0;">
 
   <div class="tabs">
-    <button class="tab active" onclick="setSeg('north')">
+    <button class="tab" onclick="setSeg('north')">
       🔵 북부 구간<br><small>운정중앙 ↔ 서울역</small>
     </button>
-    <button class="tab" onclick="setSeg('south')">
+    <button class="tab active" onclick="setSeg('south')">
       🔵 남부 구간<br><small>수서 ↔ 동탄</small>
     </button>
   </div>
@@ -364,7 +364,7 @@ const DATA = {
   }
 };
 
-let seg='north', dir=0, day='week';
+let seg='south', dir=1, day='week';
 
 function toMin(t) {
   let [h,m]=t.split(':').map(Number);
